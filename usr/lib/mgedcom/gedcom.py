@@ -33,17 +33,18 @@
 #            - Handle case of empty/blank first/last names
 # 2009/06/09 - Handle case of NOTE text starting on NOTE line itself
 #            - Handle case of UTF-16-BE/UTF-16-LE with/without BOM characters
-#	     - Handle case of UTF-8 with BOM characters
+#            - Handle case of UTF-8 with BOM characters
 # 2016/01/12 - Re-format to PEP-8 formatting style
-
-__all__ = ["Gedcom", "Element", "GedcomParseError"]
 
 # Global imports
 import string
 import codecs											# Added by Darren Enns 2009-06-08
 
+__all__ = ["Gedcom", "Element", "GedcomParseError"]
+
 
 class Gedcom:
+
     """ Gedcom parser
 
     This parser is for the Gedcom 5.5 format.  For documentation of
@@ -72,6 +73,7 @@ class Gedcom:
         # Added by Darren Enns 2009-06-08
         self.__unicode = self.__parse(file)
 
+
     def unicode_type(self):
         """ Return a list of all the elements in the Gedcom file.  The
         elements are in the same order as they appeared in the file.
@@ -99,8 +101,7 @@ class Gedcom:
         f = open(file, "rb")
 
         sample = f.read(4)									# Added by Darren Enns 2009-06-08
-        if (sample.startswith(codecs.BOM_UTF16_LE)
-            ):						# Added by Darren Enns 2009-06-08
+        if (sample.startswith(codecs.BOM_UTF16_LE)):						# Added by Darren Enns 2009-06-08
             unicode = "utf-16-le"								# Added by Darren Enns 2009-06-08
             # Added by Darren Enns 2009-06-08
             f = codecs.open(file, "rb", "utf-16")
@@ -260,6 +261,7 @@ class Gedcom:
 
 
 class GedcomParseError(Exception):
+
     """ Exception raised when a Gedcom parsing error occurs
     """
 
@@ -271,6 +273,7 @@ class GedcomParseError(Exception):
 
 
 class Element:
+
     """ Gedcom element
 
     Each line in a Gedcom file is an element with the format
@@ -376,7 +379,7 @@ class Element:
         try:
             for crit in criteria.split(':'):
                 key, value = crit.split('=')
-        except:
+        except:  # noqa
             return False
         match = True
         for crit in criteria.split(':'):
@@ -390,7 +393,7 @@ class Element:
                     year = int(value)
                     if not self.birth_year_match(year):
                         match = False
-                except:
+                except:  # noqa
                     match = False
             elif key == "birthrange":
                 try:
@@ -399,14 +402,14 @@ class Element:
                     year2 = int(year2)
                     if not self.birth_range_match(year1, year2):
                         match = False
-                except:
+                except:  # noqa
                     match = False
             elif key == "death":
                 try:
                     year = int(value)
                     if not self.death_year_match(year):
                         match = False
-                except:
+                except:  # noqa
                     match = False
             elif key == "deathrange":
                 try:
@@ -415,14 +418,14 @@ class Element:
                     year2 = int(year2)
                     if not self.death_range_match(year1, year2):
                         match = False
-                except:
+                except:  # noqa
                     match = False
             elif key == "marriage":
                 try:
                     year = int(value)
                     if not self.marriage_year_match(year):
                         match = False
-                except:
+                except:  # noqa
                     match = False
             elif key == "marriagerange":
                 try:
@@ -431,7 +434,7 @@ class Element:
                     year2 = int(year2)
                     if not self.marriage_range_match(year1, year2):
                         match = False
-                except:
+                except:  # noqa
                     match = False
 
         return match
@@ -562,7 +565,7 @@ class Element:
             return -1										# Added by Darren Enns 2009-02-19
         try:
             return int(date)
-        except:
+        except:  # noqa
             return -1
 
     def death(self):
@@ -595,7 +598,7 @@ class Element:
             return -1										# Added by Darren Enns 2009-02-19
         try:
             return int(date)
-        except:
+        except:  # noqa
             return -1
 
     def deceased(self):
@@ -649,7 +652,7 @@ class Element:
                                 date = datel[len(datel) - 1]
                                 try:
                                     dates.append(int(date))
-                                except:
+                                except:  # noqa
                                     pass
         return dates
 
